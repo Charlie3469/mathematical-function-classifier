@@ -228,9 +228,20 @@ Stacking Ensemble
 │  │  ├─ feature_importance.html
 │  │  ├─ Math_Function_Dataset_Feature_Engineering.html
 │  │  └─ Model_Comparison.html
-│  ├─ v2/  [預計建立]
 │  │
-│  └─ comparison_results/  [預計建立]
+│  ├─ v2/
+│  │  ├─ function_dataset_v2.csv
+│  │  ├─ function_dataset_cleaned_v2.csv
+│  │  ├─ function_dataset_merged_v2.csv
+│  │  ├─ function_metadata_v2.csv
+│  │  ├─ parameter_analysis_v2.csv
+│  │  ├─ feature_importance_v2.html
+│  │  ├─ Math_Function_Dataset_Feature_Engineering_v2.html
+│  │  └─ Model_Comparison_v2.html
+│  │
+│  └─ comparison_results/
+│     ├─ v1_v2_final_comparision.csv
+│     └─ v1_v2_final_comparision.json
 │
 ├─ models/
 │  ├─ v1/
@@ -242,7 +253,8 @@ Stacking Ensemble
 │  │  ├─ best_model_tuned.joblib
 │  │  ├─ best_model.joblib
 │  │  └─ final_model.joblib
-│  └─ v2/  [預計建立]
+│  │
+│  └─ v2/
 │     ├─ LogisticRegression_baseline_v2.joblib
 │     ├─ DecisionTree_baseline_v2.joblib
 │     ├─ RandomForest_baseline_v2.joblib
@@ -277,11 +289,27 @@ Stacking Ensemble
 │  │  ├─ 12_model_tuning.py
 │  │  ├─ 13_ensemble.py
 │  │  └─ 14_final_model.py
-│  └─ v2/  [預計建立]
+│  │
+│  ├─ v2/
+│  │  ├─ 15_function_generator_v2.py
+│  │  ├─ 16_data_exploration_v2.py
+│  │  ├─ 17_data_preparation_v2.py
+│  │  ├─ 18_model_training_v2.py
+│  │  ├─ 19_model_prediction_v2.py
+│  │  ├─ 20_error_analysis_v2.py
+│  │  ├─ 21_parameter_analysis_v2.py
+│  │  ├─ 22_sine_cosine_analysis_v2.py
+│  │  ├─ 23_feature_engineering_v2.py
+│  │  ├─ 24_feature_experiment_v2.py
+│  │  ├─ 25_feature_importance_v2.py
+│  │  ├─ 26_model_tuning_v2.py
+│  │  ├─ 27_ensemble_v2.py
+│  │  └─ 28_final_model_v2.py
+│  │
+│  └─ 29_final_comparison.py
 │
-├─ final_comparison.py  [預計建立]
 ├─ app.py
-├─ app_v2.py  [預計建立]
+├─ app_v2.py
 ├─ requirements.txt
 └─ README.md
 ```
@@ -290,10 +318,11 @@ Stacking Ensemble
 ## 專案版本狀態
 - 2026/9/4有初步想法
 - 2026/9/7開始動工
-- 2026/9/20完成V1版本作品
-共花了約2個禮拜時間
+- 2026/9/20完成 V1 版本作品
+- 2026/9/24完成 V2 版本作品
+共花了約3個禮拜時間
 
-後續 V2 版本將從新的資料生成與實驗流程開始，並重新進行模型訓練、模型比較、錯誤分析、特徵工程與模型調整，最後製作`app_v2.py`，讓使用者只需要輸入 10 個數據即可進行函數辨識，預計於 2026/9/27 完成。也會再針對目前的結果、模型表現、錯誤分析與整體專案內容進行整理與改善。
+後續 V3 版本將從新的資料生成與實驗流程開始，並重新進行模型訓練、模型比較、錯誤分析、特徵工程與模型調整。也會再針對目前的結果、模型表現、錯誤分析與整體專案內容進行整理與改善。
 
 ---
 ## 使用技術
