@@ -9,7 +9,7 @@ from pathlib import Path
 # 基本設定
 N_POINTS = 100
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "models" / "final_model.joblib"
+MODEL_PATH = BASE_DIR / "models" / "v1" / "final_model.joblib"
 
 LABEL_NAMES = {"linear": "Linear(線性)",
                "quadratic": "Quadratic(二次式)",
@@ -61,7 +61,7 @@ def make_features(y_values, feature_names):
     first_diff = np.diff(y)
     second_diff = np.diff(y, n=2)
     math_features = {"slope": slope,
-                     "amplitude": ((np.max(y) - np.min(y))/2),
+                     "amplitude": (np.max(y) - np.min(y)),
                      "first_diff_mean": np.mean(first_diff),
                      "first_diff_std": np.std(first_diff),
                      "second_diff_mean": np.mean(second_diff),
@@ -80,7 +80,7 @@ def make_features(y_values, feature_names):
 # ----推估函數參數----
 def estimate_parameters(prediction, y_values):
     y = np.asarray(y_values, dtype=float)
-    x = np.arange(len(y), dtype=float)
+    x = np.linspace(-2, 2, len(y))
     prediction = str(prediction).lower()
     if prediction == "linear":                  # Linear: y = ax + b
         a, b = np.polyfit(x, y, 1)

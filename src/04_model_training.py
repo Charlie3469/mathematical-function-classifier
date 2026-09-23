@@ -11,7 +11,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\function_dataset_cleaned.csv')
+df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_cleaned.csv')
 
 # 定義特徵與目標變數
 X = df.drop(columns=['label'])
@@ -21,7 +21,6 @@ y = df['label']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=10, stratify=y)
 print(f"訓練集類別:\n{y_train.value_counts()}\n")
 print(f"測試集類別:\n{y_test.value_counts()}\n")
-print('-'*100)
 
 # 建立pipeline, 將數據標準化, 並蒐集模型
 models = {
@@ -44,12 +43,11 @@ models = {
 }
 
 for name, model in models.items():
-    print(f"{name} 進行中...")
     start_time = time.perf_counter()        # 開始計時
     model.fit(X_train, y_train)
     end_time = time.perf_counter()          # 結束計時
     elapsed_time = end_time - start_time    # 計算經過時間
-    print(f"{name} 訓練完成, 一共花了: {elapsed_time:.3f}秒\n")
+    print(f"{name} 模型訓練完成, 耗時: {elapsed_time:.3f}秒\n")
 
     # 儲存到joblib
-    joblib.dump(model, rf'D:\Python\我的AI作品集\專案1_數學函數辨識\models\{name}_baseline.joblib')
+    joblib.dump(model, rf'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\{name}_baseline.joblib')

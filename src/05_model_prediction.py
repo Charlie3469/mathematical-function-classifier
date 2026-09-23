@@ -1,6 +1,6 @@
 # 05_model_prediction.py
 import pandas as pd
-from joblib import load
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -11,7 +11,7 @@ from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import *
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\function_dataset_cleaned.csv')
+df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_cleaned.csv')
 X = df.drop(columns=['label'])
 y = df['label']
 
@@ -35,11 +35,42 @@ models = {
         SVC()
     )
 }
+results = []
+trained_models = {}
 
 # 預測模型
 for name, model in models.items():
-    model = load(rf'D:\Python\我的AI作品集\專案1_數學函數辨識\models\{name}_baseline.joblib')
+    model = joblib.load(rf'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\{name}_baseline.joblib')
+    trained_models[name] = model        # 儲存模型物件
+
     y_pred = model.predict(X_test)
-    print(f"{name} 模型計算準確度: {accuracy_score(y_test, y_pred):.4f}")
-    print(f"{name} 模型的混淆矩陣:\n{confusion_matrix(y_test, y_pred)}")
+    acc = accuracy_score(y_test, y_pred)
+    pre = precision_score(y_test, y_pred, average='macro')
+    recall = recall_score(y_test, y_pred, average='macro')
+    f1 = f1_score(y_test, y_pred, average='macro')
+    print(f"{name} 模型計算準確度: {acc:.4f}")
+    print(f"{name} 模型的混淆矩陣:\n{confusion_matrix(y_test, y_pred)}\n")
     print(f"{name} 模型的分類報告:\n{classification_report(y_test, y_pred)}\n")
+    results.append({'Model': name, 
+                    'Accuracy': acc, 
+                    'Precision': pre, 
+                    'Recall': recall, 
+                    'F1': f1})
+results_df = pd.DataFrame(results)
+
+# 儲存成網頁
+results_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\Model_Comparison.html')
+
+print("模型效能比較:")
+print(results_df.to_string(index=False, formatters={'Accuracy': '{:.3f}'.format, 
+                                                    'Precision': '{:.3f}'.format, 
+                                                    'Recall': '{:.3f}'.format, 
+                                                    'F1': '{:.3f}'.format}))
+
+# 找出 F1 最高的模型
+best_result = results_df.loc[results_df['F1'].idxmax()]
+best_model_name = best_result['Model']
+best_model = trained_models[best_model_name]
+print(f"\n最佳模型:\n{best_result}")
+joblib.dump(best_model, r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
+print("V1 最佳模型已儲存!")

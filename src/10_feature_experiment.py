@@ -6,23 +6,22 @@ from joblib import load
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.linear_model import LinearRegression
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\function_dataset_cleaned.csv')
+df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_cleaned.csv')
 X = df.drop(columns=['label'])
 y = df['label']
 
 # 分割測試資料
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=10, stratify=y)
 
-# 先將原本100個欄位拿去訓練模型
-best_model = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\best_model.joblib')
+# 先將原本10個欄位拿去訓練模型
+best_model = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
 best_model.fit(X_train, y_train)
 y_pred = best_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
-print("----原始100個特徵拿去訓練模型的結果----")
+print("原始特徵:")
 print(f"準確度: {accuracy:.3f}")
-print(f"混淆矩陣:\n{confusion_matrix(y_test, y_pred)}")
-print(f"分類報告:\n{classification_report(y_test, y_pred)}")
-print("="*100)
+print(f"混淆矩陣:\n{confusion_matrix(y_test, y_pred)}\n")
+print(f"分類報告:\n{classification_report(y_test, y_pred)}\n")
 
 # ----建立數學特徵----
 # 處理訓練集的部分
@@ -83,23 +82,22 @@ X_test_math = pd.concat([X_test.reset_index(drop=True),
 
 
 # 將結合後的數據再訓練模型一次
-best_model_math = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\best_model.joblib')
+best_model_math = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
 best_model_math.fit(X_train_math, y_train.reset_index(drop=True))
 y_pred_math = best_model_math.predict(X_test_math)
 math_accuracy = accuracy_score(y_test.reset_index(drop=True), y_pred_math)
-print("----新增一些數學特徵之後, 拿去訓練模型的結果----")
+print("新增一些數學特徵之後:")
 print(f"準確度: {math_accuracy:.3f}")
-print(f"混淆矩陣:\n{confusion_matrix(y_test.reset_index(drop=True), y_pred_math)}")
+print(f"混淆矩陣:\n{confusion_matrix(y_test.reset_index(drop=True), y_pred_math)}\n")
 print(f"分類報告:\n{classification_report(y_test.reset_index(drop=True), y_pred_math)}")
-print("="*100)
+print("-"*100)
 
 # 比較結果
 improvement = math_accuracy - accuracy
-print("**以下是本次實驗的總整理**")
+print("----實驗結果----")
 print(f"原始特徵準確度: {accuracy:.3f}")
 print(f"數學特徵準確度: {math_accuracy:.3f}")
 print(f"比原本特徵進步了: {improvement:+.3f}")
-
 print("結論:", end=" ")
 if improvement > 0:
     print("加入數學特徵後, 準確度提升。")

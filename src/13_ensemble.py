@@ -1,15 +1,15 @@
 # 13_ensemble.py
 import pandas as pd
 import joblib
-from joblib import load
+from sklearn.ensemble import StackingClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, StackingClassifier
 from sklearn.svm import SVC
-from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import *
 
 # 讀取資料
-data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\function_dataset_merged.csv')
+data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_merged.csv')
 X = data.drop(columns=['label'])
 y = data['label']
 
@@ -19,60 +19,55 @@ X_test = X.iloc[train_rows:].copy()
 y_train = y.iloc[:train_rows].copy()
 y_test = y.iloc[train_rows:].copy()
 
-best_model = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\best_model.joblib')
-best_model.fit(X_train, y_train)
-y_pred = best_model.predict(X_test)
-print(f"一開始測試數據準確度: {accuracy_score(y_test, y_pred):.4f}")
+baseline_model = joblib.load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
+baseline_model.fit(X_train, y_train)
+baseline_train_pred = baseline_model.predict(X_train)
+baseline_test_pred = baseline_model.predict(X_test)
+baseline_train_acc = accuracy_score(y_train, baseline_train_pred)
+baseline_test_acc = accuracy_score(y_test, baseline_test_pred)
 
-param_grid = {'n_estimators': [100, 150, 200],
-              'max_depth': [None, 10, 20],
-              'min_samples_split': [2, 3, 5],
-              'min_samples_leaf': [1]}
+tuned = joblib.load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model_tuned.joblib')
+tuned.fit(X_train, y_train)
+tuned_train_pred = tuned.predict(X_train)
+tuned_test_pred = tuned.predict(X_test)
+tuned_train_acc = accuracy_score(y_train, tuned_train_pred)
+tuned_test_acc = accuracy_score(y_test, tuned_test_pred)
 
-rf = RandomForestClassifier(random_state=10, n_jobs=-1)
-grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=3, 
-                           scoring='accuracy', n_jobs=-1, verbose=2)
-grid_search.fit(X_train, y_train)
-
-best_model_modified = grid_search.best_estimator_
-train_pred = best_model_modified.predict(X_train)
-test_pred = best_model_modified.predict(X_test)
-print(f"調參後測試數據準確度: {accuracy_score(y_test, test_pred):.4f}")
-
-# 定義基礎學習器 & 最終學習器
+# 定義學習器
 base_learners = [('DecisionTree', DecisionTreeClassifier(random_state=10)),
-                 ('RandomForest', 
-                  RandomForestClassifier(n_estimators=grid_search.best_params_['n_estimators'],
-                                         random_state=10,
-                                         max_depth=grid_search.best_params_['max_depth'],
-                                         min_samples_split=grid_search.best_params_['min_samples_split']))]
-final_estimator = SVC(random_state=10)
+                 ('RandomForest', tuned)]
+final_estimator = make_pipeline(StandardScaler(), 
+                                SVC(random_state=10))
 
-# 利用集成學習的方式訓練以上 base_learners 模型
+# 建立 Stacking 模型
 st_model = StackingClassifier(estimators=base_learners, final_estimator=final_estimator)
 st_model.fit(X_train, y_train)
-
 ensemble_train_pred = st_model.predict(X_train)
-ensemble_train_acc = accuracy_score(y_train, ensemble_train_pred)
-print(f"Ensemble 訓練數據準確度: {ensemble_train_acc:.4f}")
-
 ensemble_test_pred = st_model.predict(X_test)
+ensemble_train_acc = accuracy_score(y_train, ensemble_train_pred)
 ensemble_test_acc = accuracy_score(y_test, ensemble_test_pred)
-print(f"Ensemble 測試數據準確度: {ensemble_test_acc:.4f}")
-print(f"混淆矩陣:\n{confusion_matrix(y_test, ensemble_test_pred)}")
+print("Ensemble 模型評估:")
+print(f"訓練數據準確度: {ensemble_train_acc:.4f}")
+print(f"測試數據準確度: {ensemble_test_acc:.4f}\n")
+print(f"混淆矩陣:\n{confusion_matrix(y_test, ensemble_test_pred)}\n")
 print(f"分類報告:\n{classification_report(y_test, ensemble_test_pred)}\n")
 
-# 選出最佳模型
-if ensemble_test_acc >= accuracy_score(y_test, y_pred) and ensemble_test_acc >= accuracy_score(y_test, test_pred):
-    model = st_model
-elif accuracy_score(y_test, y_pred) >= accuracy_score(y_test, test_pred) and accuracy_score(y_test, y_pred) >= ensemble_test_acc:
-    model = best_model
-else:
-    model = best_model_modified
-print(f"最佳模型: {model}\n")
+# 選出測試集表現最好的模型
+print("----實驗結果----")
+print(f"模型調參前: {baseline_test_acc:.4f}")
+print(f"模型調參後: {tuned_test_acc:.4f}")
+print(f"Stacking Ensemble: {ensemble_test_acc:.4f}\n")
+
+model_results = {'模型調參前': (baseline_test_acc, baseline_model),
+                 '模型調參後': (tuned_test_acc, tuned),
+                 'Stacking Ensemble': (ensemble_test_acc, st_model)}
+best_model_name = max(model_results, key=lambda name: model_results[name][0])
+best_accuracy, final_model = model_results[best_model_name]
+print(f"最佳模型: {best_model_name} 模型")
+print(f"準確度: {best_accuracy:.4f}\n")
 
 # 儲存最終模型
-model_package = {'model': model, 
+model_package = {'model': final_model,
                  'feature_names': X_train.columns.tolist()}
-joblib.dump(model_package, r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\final_model.joblib')
+joblib.dump(model_package, r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\final_model.joblib')
 print("已儲存最終模型!")

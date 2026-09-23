@@ -3,7 +3,7 @@ import pandas as pd
 from joblib import load
 from sklearn.metrics import *
 
-data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\function_dataset_merged.csv')
+data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_merged.csv')
 X = data.drop(['label'], axis=1)
 y = data['label']
 
@@ -15,16 +15,17 @@ y_train = y.iloc[:train_rows].copy()
 y_test = y.iloc[train_rows:].copy()
 
 # 載入最終模型
-model_package = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\final_model.joblib')
+model_package = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\final_model.joblib')
 final_model = model_package['model']
 feature_names = model_package['feature_names']
 
-print("**最終模型結果**")
 train_pred = final_model.predict(X_train)
 train_acc = accuracy_score(y_train, train_pred)
-print(f"訓練數據準確度: {train_acc:.4f}")
 test_pred = final_model.predict(X_test)
 test_acc = accuracy_score(y_test, test_pred)
+
+print("----最終結果----")
+print(f"訓練數據準確度: {train_acc:.4f}")
 print(f"測試數據準確度: {test_acc:.4f}")
 print(f"混淆矩陣:\n{confusion_matrix(y_test, test_pred)}\n")
 print(f"分類報告:\n{classification_report(y_test, test_pred)}\n")

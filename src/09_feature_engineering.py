@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\function_dataset_cleaned.csv')
+df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_cleaned.csv')
 X = df.drop(columns=['label'])
 y = df['label']
 
@@ -30,8 +30,7 @@ for row in X_train.values:
     train_slopes.append(train_model.coef_[0])
 train_slopes = np.array(train_slopes)  
 
-print("****以下是特徵工程的結果****")
-print(f"訓練數據的形狀: {X_train_scaled.shape}")
+print("----以下是特徵工程的結果----")
 print(f"原始最大值:\n{X_train.max(axis=0)}\n")              # 最大值
 print(f"標準化後的最大值:\n{X_train_scaled.max(axis=0)}\n")
 print(f"原始最小值:\n{X_train.min(axis=0)}\n")              # 最小值
@@ -62,13 +61,11 @@ train_math_features = pd.DataFrame({'slope': train_slopes,
                                     'first_diff_std': train_first_diff_std,
                                     'second_diff_mean': train_second_diff_mean,
                                     'second_diff_std': train_second_diff_std})
-print(f"X_train數學特徵前5筆:\n{train_math_features.head()}")
-print(f"形狀: {train_math_features.shape}")
+print(f"X_train數學特徵前5筆:\n{train_math_features.head()}\n")
 
 # 加入原始特徵
 X_train_math = pd.concat([X_train.reset_index(drop=True), 
                           train_math_features.reset_index(drop=True)], axis=1)
-print("加入原始特徵後:")
 print(f"X_train_math 形狀為: {X_train_math.shape}")
 print('-'*100)
 
@@ -100,35 +97,32 @@ test_math_features = pd.DataFrame({'slope': test_slopes,
                                    'first_diff_std': test_first_diff_std,
                                    'second_diff_mean': test_second_diff_mean,
                                    'second_diff_std': test_second_diff_std})
-print(f"X_test數學特徵前5筆:\n{test_math_features.head()}")
-print(f"形狀: {test_math_features.shape}")
+print(f"X_test數學特徵前5筆:\n{test_math_features.head()}\n")
 
 # 加入原始特徵
 X_test_math = pd.concat([X_test.reset_index(drop=True),
                          test_math_features.reset_index(drop=True)], axis=1)
-print("加入原始特徵後:")
 print(f"X_test_math 形狀為: {X_test_math.shape}")
-print('-'*100)
+print('='*100)
 
 # 把訓練集跟測試集結合成一個大表格
 X_math_merged = pd.concat([X_train_math.reset_index(drop=True), 
                            X_test_math.reset_index(drop=True)], axis=0)
-print("把訓練數據跟測試數據合併之後:")
-print(f"形狀為: {X_math_merged.shape}")
-print('='*100)
+print(f"把訓練數據跟測試數據合併之後, 形狀為: {X_math_merged.shape}\n")
 
 # 將合併後的表格儲存成新的檔案
 y_merged = pd.concat([y_train.reset_index(drop=True), 
                       y_test.reset_index(drop=True)], axis=0)
 math_merged = pd.concat([y_merged, X_math_merged], axis=1)
-math_merged.to_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\function_dataset_merged.csv', index=False)
+math_merged.to_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_merged.csv', index=False)
 
 # 儲存成網頁
-math_merged.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\Math_Function_Dataset_Feature_Engineering.html')
+math_merged.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\Math_Function_Dataset_Feature_Engineering.html')
 
 # 再進行標準化一次
 scaler_after = StandardScaler()
 X_train_math_scaled = scaler_after.fit_transform(X_train_math)
 X_test_math_scaled = scaler_after.transform(X_test_math)
-print(f"標準化之後的平均值:\n{X_train_math_scaled.mean(axis=0)}")
-print(f"標準化之後的標準差:\n{X_train_math_scaled.std(axis=0)}")
+print("標準化之後:")
+print(f"平均值:\n{X_train_math_scaled.mean(axis=0)}")
+print(f"標準差:\n{X_train_math_scaled.std(axis=0)}")
