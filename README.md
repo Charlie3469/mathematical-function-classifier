@@ -35,7 +35,7 @@
 - `noise_sigma` 紀錄產生資料時使用的雜訊程度
 ### 生成Metadata: `function_metadata.csv` 
 - 紀錄函數生成時使用的隱藏參數
-- 主要用於資料分析與錯誤分析，避免發生 **Data Leakage（資料洩漏）**。
+- 僅用於資料分析、錯誤分析與研究，不直接作為模型輸入，以避免將函數生成參數直接提供給模型而造成**資料洩漏**。
 
 ---
 ## 研究過程
@@ -124,7 +124,7 @@ min_samples_leaf = 1
 - Random Forest
 - SVM
 建立 Stacking Ensemble。
-結果 Stacking Ensemble 測試集準確率：**80.87%**，也沒有優於單一 Random Forest 模型。
+結果 Ensemble 測試集準確率：**81.37%**，也沒有優於單一 Random Forest 模型。
 
 ### 錯誤分析
 錯誤分析顯示，不同函數類別之間仍存在一定程度的混淆。
@@ -144,7 +144,7 @@ min_samples_leaf = 1
 ### 1. 使用的是合成資料
 目前資料由程式自行產生，和真實世界中的數學資料、感測器資料或手繪曲線仍有差異，因此模型在真實資料上的表現尚未經過驗證。
 ### 2. 資料集調整
-在專案初期，曾使用過約 24,000 筆資料的較大版本。由於實際運算成本較高，電腦要跑的時間也相當久，所以後續又重新調整資料規模，因此目前 V1 版本使用的是 4,000 筆資料(4000x107)。這次調整也成為本專案實作過程中的重要經驗：
+在專案初期，曾使用過約 24,000 筆資料的較大版本。由於實際運算成本較高，電腦要跑的時間也相當久，所以後續又重新調整資料規模，因此目前 V1 版本使用的是 4,000 筆資料。這次調整也成為本專案實作過程中的重要經驗：
 **資料規模不是越大越好，還必須考慮實際的運算資源與實驗成本。**
 ### 3. 特徵工程的改善幅度有限
 加入目前設計的數學特徵後，模型表現反而小幅下降，表示單靠目前這幾個統計/差分特徵還不足以改善函數間的分類效果。
@@ -219,48 +219,69 @@ Stacking Ensemble
 專案1_數學函數辨識/
 │
 ├─ data/
-│  ├─ function_dataset.csv
-│  ├─ function_dataset_cleaned.csv
-│  ├─ function_dataset_merged.csv
-│  ├─ function_metadata.csv
-│  ├─ parameter_analysis.csv
-│  ├─ feature_importance.html
-│  ├─ Math_Function_Dataset_Feature_Engineering.html
-│  └─ Model_Comparison.html
+│  ├─ v1/
+│  │  ├─ function_dataset.csv
+│  │  ├─ function_dataset_cleaned.csv
+│  │  ├─ function_dataset_merged.csv
+│  │  ├─ function_metadata.csv
+│  │  ├─ parameter_analysis.csv
+│  │  ├─ feature_importance.html
+│  │  ├─ Math_Function_Dataset_Feature_Engineering.html
+│  │  └─ Model_Comparison.html
+│  ├─ v2/  [預計建立]
+│  │
+│  └─ comparison_results/  [預計建立]
 │
 ├─ models/
-│  ├── LogisticRegression_baseline.joblib
-│  ├── DecisionTree_baseline.joblib
-│  ├── RandomForest_baseline.joblib
-│  ├── KNN_baseline.joblib
-│  ├── SVM_baseline.joblib
-│  ├── best_model.joblib
-│  └── final_model.joblib
+│  ├─ v1/
+│  │  ├─ LogisticRegression_baseline.joblib
+│  │  ├─ DecisionTree_baseline.joblib
+│  │  ├─ RandomForest_baseline.joblib
+│  │  ├─ KNN_baseline.joblib
+│  │  ├─ SVM_baseline.joblib
+│  │  ├─ best_model_tuned.joblib
+│  │  ├─ best_model.joblib
+│  │  └─ final_model.joblib
+│  └─ v2/  [預計建立]
+│     ├─ LogisticRegression_baseline_v2.joblib
+│     ├─ DecisionTree_baseline_v2.joblib
+│     ├─ RandomForest_baseline_v2.joblib
+│     ├─ KNN_baseline_v2.joblib
+│     ├─ SVM_baseline_v2.joblib
+│     ├─ best_model_tuned_v2.joblib
+│     ├─ best_model_v2.joblib
+│     └─ final_model_v2.joblib
 │
 ├─ notebooks/
 │  ├── 01_function_generator.ipynb
 │  ├── 02_eda.ipynb
 │  ├── 03_models.ipynb
 │  ├── 04_error_analysis.ipynb
-│  ├── 05_featrues.ipynb
+│  ├── 05_features.ipynb
 │  ├── 06_ensembling.ipynb
 │  └── 07_final.ipynb
 │
-├─ 01_function_generator.py
-├─ 02_data_exploration.py
-├─ 03_data_preparation.py
-├─ 04_model_training.py
-├─ 05_model_prediction.py
-├─ 06_model_comparison.py
-├─ 07_error_analysis.py
-├─ 08_parameter_analysis.py
-├─ 09_feature_engineering.py
-├─ 10_feature_experiment.py
-├─ 11_feature_importance.py
-├─ 12_model_tuning.py
-├─ 13_ensemble.py
-├─ 14_final_model.py
+├─ src/
+│  ├─ v1/
+│  │  ├─ 01_function_generator.py
+│  │  ├─ 02_data_exploration.py
+│  │  ├─ 03_data_preparation.py
+│  │  ├─ 04_model_training.py
+│  │  ├─ 05_model_prediction.py
+│  │  ├─ 06_error_analysis.py
+│  │  ├─ 07_parameter_analysis.py
+│  │  ├─ 08_sine_cosine_analysis.py
+│  │  ├─ 09_feature_engineering.py
+│  │  ├─ 10_feature_experiment.py
+│  │  ├─ 11_feature_importance.py
+│  │  ├─ 12_model_tuning.py
+│  │  ├─ 13_ensemble.py
+│  │  └─ 14_final_model.py
+│  └─ v2/  [預計建立]
+│
+├─ final_comparison.py  [預計建立]
 ├─ app.py
+├─ app_v2.py  [預計建立]
 ├─ requirements.txt
 └─ README.md
 ```
@@ -272,7 +293,7 @@ Stacking Ensemble
 - 2026/9/20完成V1版本作品
 共花了約2個禮拜時間
 
-後續 V2 版本將從新的資料生成與實驗流程開始，並重新進行模型訓練、模型比較、錯誤分析、特徵工程與模型調整，最後製作`app2.py`，讓使用者只需要輸入 10 個數據即可進行函數辨識，預計於 2026/9/27 完成。也會再針對目前的結果、模型表現、錯誤分析與整體專案內容進行整理與改善。
+後續 V2 版本將從新的資料生成與實驗流程開始，並重新進行模型訓練、模型比較、錯誤分析、特徵工程與模型調整，最後製作`app_v2.py`，讓使用者只需要輸入 10 個數據即可進行函數辨識，預計於 2026/9/27 完成。也會再針對目前的結果、模型表現、錯誤分析與整體專案內容進行整理與改善。
 
 ---
 ## 使用技術
