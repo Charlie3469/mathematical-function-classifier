@@ -24,7 +24,7 @@ LABEL_NAMES = {"linear": "Linear",
 LABEL_ORDER = list(LABEL_NAMES.keys())
 
 # 載入 V1 結合後的資料
-data1 = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_merged.csv')
+data1 = pd.read_csv('data/v1/function_dataset_merged.csv')
 X1 = data1.drop(['label'], axis=1)
 y1 = data1['label']
 
@@ -35,7 +35,7 @@ y1_train = y1.iloc[:train_v1_rows].copy()
 y1_test = y1.iloc[train_v1_rows:].copy()
 
 # 載入 V1 最終模型
-model_v1_package = joblib.load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\final_model.joblib')
+model_v1_package = joblib.load('models/v1/final_model.joblib')
 v1_final_model = model_v1_package['model']
 v1_feature_names = model_v1_package['feature_names']
 
@@ -63,7 +63,7 @@ print(f"分類報告:\n{classification_report(y1_test, test_v1_pred, labels=LABE
                                       target_names=[LABEL_NAMES[x] for x in LABEL_ORDER])}\n\n")
 
 # 載入 V2 結合後的資料
-data2 = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_merged_v2.csv')
+data2 = pd.read_csv('data/v2/function_dataset_merged_v2.csv')
 X2 = data2.drop(['label'], axis=1)
 y2 = data2['label']
 
@@ -74,7 +74,7 @@ y2_train = y2.iloc[:train_v2_rows].copy()
 y2_test = y2.iloc[train_v2_rows:].copy()
 
 # 載入 V2 最終模型
-model_v2_package = joblib.load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\final_model_v2.joblib')
+model_v2_package = joblib.load('models/v2/final_model_v2.joblib')
 v2_final_model = model_v2_package['model']
 v2_feature_names = model_v2_package['feature_names']
 
@@ -121,11 +121,9 @@ comparison_df = pd.DataFrame([{"version": "V1",
                                "test_accuracy": test_v2_acc,
                                "error_rate": v2_error / len(y2_test),
                                "training_time_seconds": v2_training_time}])
-comparison_df.to_csv(
-    r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\comparison_results\v1_v2_final_comparison.csv',
-    index=False)
+comparison_df.to_csv('data/comparison_results/v1_v2_final_comparison.csv', index=False)
 
-comparison_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\comparison_results\v1_v2_final_comparison.html')
+comparison_df.to_html('data/comparison_results/v1_v2_final_comparison.html')
 
 accuracy_difference = test_v1_acc - test_v2_acc
 comparison_json = {"V1": {"model": type(v1_final_model).__name__,
@@ -153,7 +151,6 @@ comparison_json = {"V1": {"model": type(v1_final_model).__name__,
                    "comparison": {"accuracy_difference_v1_minus_v2": accuracy_difference,
                                   "higher_test_accuracy_version": higher_model}
                   }
-with open(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\comparison_results\v1_v2_final_comparison.json',
-    'w', encoding='utf-8') as f:
+with open('data/comparison_results/v1_v2_final_comparison.json', 'w', encoding='utf-8') as f:
     json.dump(comparison_json, f, ensure_ascii=False, indent=4)
 print("最終比較結果已儲存!")
