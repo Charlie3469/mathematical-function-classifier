@@ -11,7 +11,7 @@ from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import *
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_cleaned_v2.csv')
+df = pd.read_csv('data/v2/function_dataset_cleaned_v2.csv')
 X = df.drop(columns=['label'])
 y = df['label']
 
@@ -40,7 +40,7 @@ trained_models = {}
 
 # 預測模型
 for name, model in models.items():
-    model = joblib.load(rf'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\{name}_baseline_v2.joblib')
+    model = joblib.load(f'models/v2/{name}_baseline_v2.joblib')
     trained_models[name] = model        # 儲存模型物件
 
     # 進行預測
@@ -60,7 +60,7 @@ for name, model in models.items():
 results_df = pd.DataFrame(results)
 
 # 儲存成網頁
-results_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\Model_Comparison_v2.html')
+results_df.to_html('data/v2/Model_Comparison_v2.html')
 
 print("模型效能比較:")
 print(results_df.to_string(index=False, formatters={'Accuracy': '{:.3f}'.format, 
@@ -73,5 +73,5 @@ best_result = results_df.loc[results_df['F1'].idxmax()]
 best_model_name = best_result['Model']
 best_model = trained_models[best_model_name]
 print(f"\n最佳模型:\n{best_result}")
-joblib.dump(best_model, r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\best_model_v2.joblib')
+joblib.dump(best_model, 'models/v2/best_model_v2.joblib')
 print("V2 最佳模型已儲存!")

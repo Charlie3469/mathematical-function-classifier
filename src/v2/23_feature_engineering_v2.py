@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_cleaned_v2.csv')
+df = pd.read_csv('data/v2/function_dataset_cleaned_v2.csv')
 X = df.drop(columns=['label'])
 y = df['label']
 
@@ -114,7 +114,7 @@ print(f"把訓練數據跟測試數據合併之後, 形狀為: {X_math_merged.sh
 y_merged = pd.concat([y_train.reset_index(drop=True), 
                       y_test.reset_index(drop=True)], axis=0)
 math_merged = pd.concat([y_merged, X_math_merged], axis=1)
-math_merged.to_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_merged_v2.csv', index=False)
+math_merged.to_csv('data/v2/function_dataset_merged_v2.csv', index=False)
 
 # 再進行標準化一次
 scaler_after = StandardScaler()

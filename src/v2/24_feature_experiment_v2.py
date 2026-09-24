@@ -6,7 +6,7 @@ from joblib import load
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.linear_model import LinearRegression
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_cleaned_v2.csv')
+df = pd.read_csv('data/v2/function_dataset_cleaned_v2.csv')
 X = df.drop(columns=['label'])
 y = df['label']
 
@@ -14,7 +14,7 @@ y = df['label']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=10, stratify=y)
 
 # 先將原本10個欄位拿去訓練模型
-best_model = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\best_model_v2.joblib')
+best_model = load('models/v2/best_model_v2.joblib')
 best_model.fit(X_train, y_train)
 y_pred = best_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
@@ -82,7 +82,7 @@ X_test_math = pd.concat([X_test.reset_index(drop=True),
 
 
 # 將結合後的數據再訓練模型一次
-best_model_math = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\best_model_v2.joblib')
+best_model_math = load('models/v2/best_model_v2.joblib')
 best_model_math.fit(X_train_math, y_train.reset_index(drop=True))
 y_pred_math = best_model_math.predict(X_test_math)
 math_accuracy = accuracy_score(y_test.reset_index(drop=True), y_pred_math)

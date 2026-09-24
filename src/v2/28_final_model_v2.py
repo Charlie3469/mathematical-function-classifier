@@ -8,7 +8,7 @@ plt.rcParams["font.family"] = ["Microsoft JhengHei"]
 
 labels = ["linear", "quadratic", "cubic", "exponential", "logarithmic", "sine", "cosine", "reciprocal"]
 
-data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_merged_v2.csv')
+data = pd.read_csv('data/v2/function_dataset_merged_v2.csv')
 X = data.drop(['label'], axis=1)
 y = data['label']
 
@@ -20,7 +20,7 @@ y_train = y.iloc[:train_rows].copy()
 y_test = y.iloc[train_rows:].copy()
 
 # 載入最終模型
-model_package = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\final_model_v2.joblib')
+model_package = load('models/v2/final_model_v2.joblib')
 final_model = model_package['model']
 feature_names = model_package['feature_names']
 
@@ -44,7 +44,7 @@ plt.xticks(rotation=30)
 plt.yticks(rotation=0)
 plt.title('V2 最終模型混淆矩陣熱力圖')
 plt.legend()
-plt.savefig(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\final_confusion_matrix_v2.png')
+plt.savefig('data/v2/final_confusion_matrix_v2.png')
 plt.show()
 
 print(f"分類報告:\n{classification_report(y_test, test_pred)}\n")

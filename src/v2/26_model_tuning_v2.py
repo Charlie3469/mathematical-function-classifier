@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 # 讀取原始清理後資料
-data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_cleaned_v2.csv')
+data = pd.read_csv('data/v2/function_dataset_cleaned_v2.csv')
 X = data.drop(columns=['label'])
 y = data['label']
 
@@ -73,7 +73,7 @@ X_test_math = pd.concat([X_test.reset_index(drop=True),
                          test_math_features.reset_index(drop=True)], axis=1)
 
 # 調參前模型
-baseline_model = joblib.load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\best_model_v2.joblib')
+baseline_model = joblib.load('models/v2/best_model_v2.joblib')
 baseline_model.fit(X_train_math, y_train.reset_index(drop=True))
 baseline_pred = baseline_model.predict(X_test_math)
 baseline_accuracy = accuracy_score(y_test.reset_index(drop=True), baseline_pred)
@@ -122,5 +122,5 @@ print(f"混淆矩陣:\n{confusion_matrix(y_test.reset_index(drop=True), test_pre
 print(f"分類報告:\n{classification_report(y_test.reset_index(drop=True), test_pred)}")
 
 # 儲存最佳模型
-joblib.dump(best_model, r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\best_model_tuned_v2.joblib')
+joblib.dump(best_model, 'models/v2/best_model_tuned_v2.joblib')
 print("V2 調參後最佳模型已儲存!")

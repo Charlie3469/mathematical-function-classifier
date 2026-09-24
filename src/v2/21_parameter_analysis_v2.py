@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 plt.rcParams["font.family"] = ["Microsoft JhengHei"]
 plt.rcParams["axes.unicode_minus"] = False
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_v2.csv')
+df = pd.read_csv('data/v2/function_dataset_v2.csv')
 X = df.drop(columns=['sample_id', 'label', 'noise_sigma'])
 y = df['label']
 sample_id = df['sample_id']
@@ -14,14 +14,14 @@ sample_id = df['sample_id']
 X_train, X_test, y_train, y_test, id_train, id_test = train_test_split(
     X, y, sample_id, test_size=0.2, random_state=10, stratify=y)
 
-best_model = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v2\best_model_v2.joblib')
+best_model = load('models/v2/best_model_v2.joblib')
 y_pred = best_model.predict(X_test)
 
 # 建立測試資料表
 test_df = pd.DataFrame({'sample_id': id_test.values, 'label': y_test.values, 'predicted_label': y_pred})
 test_df['error'] = (test_df['label'] != test_df['predicted_label'])
 
-metadata = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_metadata_v2.csv')
+metadata = pd.read_csv('data/v2/function_metadata_v2.csv')
 metadata = metadata[['sample_id', 'param_1', 'param_2', 'param_3', 'param_4', 'noise_sigma']]
 test_df = test_df.merge(metadata, on='sample_id', how='left', validate='one_to_one')
 
@@ -61,7 +61,7 @@ for parameter in parameters:
     print("\n")
 
 # 儲存參數統計比較
-para_sum_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\parameter_analysis_v2.html')
+para_sum_df.to_html('data/v2/parameter_analysis_v2.html')
 
 # 繪製圖表(正確/錯誤樣本的參數平均值)
 plot_data = para_sum_df[['Parameter', 'Correct Mean', 'Error Mean']]
@@ -74,5 +74,5 @@ plt.xticks()
 plt.grid()
 plt.tight_layout()
 plt.legend()
-plt.savefig(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\error_analysis_v2.png')
+plt.savefig('data/v2/error_analysis_v2.png')
 plt.show()

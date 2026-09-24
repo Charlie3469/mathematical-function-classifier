@@ -143,6 +143,6 @@ dataset_df = pd.DataFrame(dataset_rows)
 metadata_df = pd.DataFrame(metadata_rows)
 
 # 儲存檔案
-dataset_df.to_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_v2.csv', index=False)
-metadata_df.to_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_metadata_v2.csv', index=False)
+dataset_df.to_csv('data/v2/function_dataset_v2.csv', index=False)
+metadata_df.to_csv('data/v2/function_metadata_v2.csv', index=False)
 print("已建立V2數據資料！")
