@@ -96,14 +96,14 @@ def estimate_parameters(prediction, y_values):
         return {"formula": (f"y = {a:.2f}e^({b:.2f}x) {c:+.2f}x {d:+.2f}"),
                 "parameters": {"a": a, "b": b, "c": c, "d": d}}
     
-    elif prediction == "logarithmic":           # Logarithmic: y = a * log|x+b| + cx + d
-        def func(x, a, b, c, d):
-            return a * np.log(np.abs(x+b)) + c*x + d
+    elif prediction == "logarithmic":           # Logarithmic: y = a * log(|x+b|) + c
+        def func(x, a, b, c):
+            return a * np.log(np.abs(x+b)) + c
         params, _ = curve_fit(func, x.astype(np.float64), y.astype(np.float64),
-                              p0=[1.0, 0.5, 0.0, 0.0], method="trf", maxfev=10000)
-        a, b, c, d = params
-        return {"formula": (f"y = {a:.2f}*log(|x {b:+.2f}|) {c:+.2f}x {d:+.2f}"),
-                "parameters": {"a": a, "b": b, "c": c, "d": d}}
+                              p0=[1.0, 0.5, 0.0], method="trf", maxfev=10000)
+        a, b, c = params
+        return {"formula": (f"y = {a:.2f}*log(|x {b:+.2f}|) {c:+.2f}"),
+                "parameters": {"a": a, "b": b, "c": c}}
     
     elif prediction == "sine":                  # Sine: y = a * sin(bx+c)+d
         def func(x, a, b, c, d):
