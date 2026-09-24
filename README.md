@@ -90,7 +90,6 @@
 
 ---
 ## 實驗結果
-
 ### 模型比較
 在使用 100 個原始函數取樣值作為輸入特徵的 Baseline 實驗中，各模型測試集準確率如下：
 - Logistic Regression：45.50%
@@ -98,9 +97,14 @@
 - **Random Forest：82.13%**
 - KNN：81.00%
 - SVM：76.00%
-其中 Random Forest 的測試集準確率為**82.13%**，因此在目前的實驗設定下，**Random Forest** 是 V1 的主要單模型。
+其中 Random Forest 的測試集準確率最高，因此 **Random Forest** 是目前 V1 版本的主要訓練模型。
 
-### 特徵工程實驗
+### 錯誤分析
+在專案初期，**Sine 與 Cosine** 曾是較明顯的混淆來源，因此進一步分析函數生成參數與 phase 範圍(例如:
+從[-pi/2, pi/2]調整成[-pi/4, pi/4])，並調整資料生成條件。調整後，兩者之間的混淆狀況有明顯降低。
+但目前仍有其他部分類別容易混淆，顯示不同函數在特定參數與雜訊條件下，可能具有相似的局部形狀。
+
+### 特徵工程
 後續加入一些數學相關特徵，包括迴歸斜率、變化量、一階差分與二階差分等，將原本的取樣值擴充為106個特徵。
 實驗結果顯示：
 - 原始取樣值：**82.13%**
@@ -119,18 +123,12 @@ min_samples_leaf = 1
 調參後測試集準確率為**81.63%**，與原本使用 106 個特徵的 Random Forest 模型相同，因此在目前搜尋範圍內，模型調參並沒有進一步提升測試集表現。
 
 ### 集成學習
-再使用 StackingClassifier，結合：
+再使用 `StackingClassifier`，結合：
 - Decision Tree
 - Random Forest
 - SVM
 建立 Stacking Ensemble。
 結果 Ensemble 測試集準確率：**81.37%**，也沒有優於單一 Random Forest 模型。
-
-### 錯誤分析
-錯誤分析顯示，不同函數類別之間仍存在一定程度的混淆。
-在專案初期，**Sine 與 Cosine** 曾是較明顯的混淆來源，因此進一步分析函數生成參數與 phase 範圍(例如:
-從-pi/2~pi/2調整成-pi/4~pi/4)，並調整資料生成條件。調整後，兩者之間的混淆狀況有明顯降低。
-但目前仍有其他部分類別容易混淆，顯示不同函數在特定參數與雜訊條件下，可能具有相似的局部形狀。
 
 ### 結論
 因此目前的實驗結果：
@@ -186,27 +184,25 @@ min_samples_leaf = 1
    ↓
 資料前處理
    ↓
-訓練 & 預測模型
+訓練模型
    ↓
-模型比較
+模型預測 & 比較
    ↓
 錯誤分析
    ↓
 Metadata / Noise Analysis
    ↓
+參數分析
+   ↓
 特徵工程
-   ↓
-Feature Experiment
-   ↓
-Feature Importance
    ↓
 模型調參
    ↓
 Stacking Ensemble
    ↓
-最終模型
+最終模型儲存
    ↓
-模型儲存
+使用者介面的開發
    ↓
 整理資料
    ↓
@@ -224,23 +220,32 @@ Stacking Ensemble
 │  │  ├─ function_dataset_cleaned.csv
 │  │  ├─ function_dataset_merged.csv
 │  │  ├─ function_metadata.csv
-│  │  ├─ parameter_analysis.csv
+│  │  ├─ Model_Comparison.html
+│  │  ├─ parameter_analysis.html
+│  │  ├─ error_analysis.png
+│  │  ├─ sine_cosine_parameter_analysis.html
+│  │  ├─ sine_cosine_error_analysis.png
 │  │  ├─ feature_importance.html
-│  │  ├─ Math_Function_Dataset_Feature_Engineering.html
-│  │  └─ Model_Comparison.html
+│  │  ├─ feature_importance_top20.png
+│  │  └─ final_confusion_matrix.png
 │  │
 │  ├─ v2/
 │  │  ├─ function_dataset_v2.csv
 │  │  ├─ function_dataset_cleaned_v2.csv
 │  │  ├─ function_dataset_merged_v2.csv
 │  │  ├─ function_metadata_v2.csv
-│  │  ├─ parameter_analysis_v2.csv
+│  │  ├─ Model_Comparison_v2.html
+│  │  ├─ parameter_analysis_v2.html
+│  │  ├─ error_analysis_v2.png
+│  │  ├─ sine_cosine_parameter_analysis_v2.html
+│  │  ├─ sine_cosine_error_analysis_v2.png
 │  │  ├─ feature_importance_v2.html
-│  │  ├─ Math_Function_Dataset_Feature_Engineering_v2.html
-│  │  └─ Model_Comparison_v2.html
+│  │  ├─ feature_importance_top10_v2.png
+│  │  └─ final_confusion_matrix_v2.png
 │  │
 │  └─ comparison_results/
 │     ├─ v1_v2_final_comparision.csv
+│     ├─ v1_v2_final_comparision.html
 │     └─ v1_v2_final_comparision.json
 │
 ├─ models/
@@ -271,7 +276,15 @@ Stacking Ensemble
 │  ├── 04_error_analysis.ipynb
 │  ├── 05_features.ipynb
 │  ├── 06_ensembling.ipynb
-│  └── 07_final.ipynb
+│  ├── 07_final.ipynb
+│  ├── 08_function_generator_v2.ipynb
+│  ├── 09_eda_v2.ipynb
+│  ├── 10_models_v2.ipynb
+│  ├── 11_error_analysis_v2.ipynb
+│  ├── 12_features_v2.ipynb
+│  ├── 13_ensembling_v2.ipynb
+│  ├── 14_final_v2.ipynb
+│  └── 15_final_comparison.ipynb
 │
 ├─ src/
 │  ├─ v1/
@@ -319,8 +332,7 @@ Stacking Ensemble
 - 2026/9/4有初步想法
 - 2026/9/7開始動工
 - 2026/9/20完成 V1 版本作品
-- 2026/9/24完成 V2 版本作品
-
+- 2026/9/25完成 V2 版本作品
 共花了約3個禮拜時間
 
 後續 V3 版本將從新的資料生成與實驗流程開始，並重新進行模型訓練、模型比較、錯誤分析、特徵工程與模型調整。也會再針對目前的結果、模型表現、錯誤分析與整體專案內容進行整理與改善。
