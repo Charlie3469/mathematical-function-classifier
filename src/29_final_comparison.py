@@ -125,6 +125,8 @@ comparison_df.to_csv(
     r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\comparison_results\v1_v2_final_comparison.csv',
     index=False)
 
+comparison_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\comparison_results\v1_v2_final_comparison.html')
+
 accuracy_difference = test_v1_acc - test_v2_acc
 comparison_json = {"V1": {"model": type(v1_final_model).__name__,
                           "sample_points": VERSION_INFO["V1"]["sample_points"],
