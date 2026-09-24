@@ -53,18 +53,16 @@ def generate_function(label, x, rng):
         param_3 = c
         param_4 = d
         y_true = a * np.exp(b*x) + c*x + d
-    elif label == "logarithmic":            # Logarithmic: y = a * log(|x+b|) + cx + d
+    elif label == "logarithmic":            # Logarithmic: y = a * log(|x+b|) + c
         a = rng.uniform(-2, 2)
         if abs(a) < 0.1:
             a = 0.1 if a >= 0 else -0.1
         b = rng.uniform(2.25, 10.0)
-        c = rng.uniform(-1, 1)
-        d = rng.uniform(-2, 2)
+        c = rng.uniform(-2, 2)
         param_1 = a
         param_2 = b
         param_3 = c
-        param_4 = d
-        y_true = a * np.log(np.abs(x+b)) + c*x + d
+        y_true = a * np.log(np.abs(x+b)) + c
     elif label == "sine":                   # Sine: y = a * sin(bx + c) + d
         a = rng.uniform(-2.0, 2.0)
         if abs(a) < 0.3:

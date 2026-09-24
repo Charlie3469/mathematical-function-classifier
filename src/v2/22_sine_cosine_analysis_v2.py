@@ -139,7 +139,7 @@ for parameter in parameters:
     print("\n")
 
 # 儲存參數統計比較
-para_sum_df.to_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\parameter_analysis_v2.csv', index=False)
+para_sum_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\sine_cosine_parameter_analysis_v2.html')
 
 # 繪製圖表(正確/錯誤樣本的參數平均值)
 plot_data = para_sum_df[['Parameter', 'Correct Mean', 'Error Mean']]
@@ -151,4 +151,6 @@ plt.title('Sine / Cosine 的錯誤樣本參數平均值')
 plt.xticks()
 plt.grid()
 plt.tight_layout()
+plt.legend()
+plt.savefig(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\sine_cosine_error_analysis_v2.png')
 plt.show()

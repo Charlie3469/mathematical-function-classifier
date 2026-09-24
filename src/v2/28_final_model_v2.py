@@ -2,6 +2,11 @@
 import pandas as pd
 from joblib import load
 from sklearn.metrics import *
+import seaborn as sns
+import matplotlib.pyplot as plt
+plt.rcParams["font.family"] = ["Microsoft JhengHei"]
+
+labels = ["linear", "quadratic", "cubic", "exponential", "logarithmic", "sine", "cosine", "reciprocal"]
 
 data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\function_dataset_merged_v2.csv')
 X = data.drop(['label'], axis=1)
@@ -28,4 +33,18 @@ print("----V2 最終結果----")
 print(f"訓練數據準確度: {train_acc:.4f}")
 print(f"測試數據準確度: {test_acc:.4f}")
 print(f"混淆矩陣:\n{confusion_matrix(y_test, test_pred)}\n")
+
+plt.figure(figsize=(10, 10))
+sns.heatmap(confusion_matrix(y_test, test_pred), 
+            cmap='coolwarm', 
+            xticklabels=[i for i in labels], 
+            yticklabels=[i for i in labels],
+            annot=True)
+plt.xticks(rotation=30)
+plt.yticks(rotation=0)
+plt.title('V2 最終模型混淆矩陣熱力圖')
+plt.legend()
+plt.savefig(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v2\final_confusion_matrix_v2.png')
+plt.show()
+
 print(f"分類報告:\n{classification_report(y_test, test_pred)}\n")
