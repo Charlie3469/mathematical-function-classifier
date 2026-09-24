@@ -116,9 +116,6 @@ y_merged = pd.concat([y_train.reset_index(drop=True),
 math_merged = pd.concat([y_merged, X_math_merged], axis=1)
 math_merged.to_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_merged.csv', index=False)
 
-# 儲存成網頁
-math_merged.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\Math_Function_Dataset_Feature_Engineering.html')
-
 # 再進行標準化一次
 scaler_after = StandardScaler()
 X_train_math_scaled = scaler_after.fit_transform(X_train_math)
