@@ -111,7 +111,7 @@
 ### 模型比較
 
 | 模型 | V1 Accuracy | V2 Accuracy |
-|---|---|---:|
+|---|---:|---:|
 | Logistic Regression | 45.50% | 21.62% |
 | Decision Tree | 71.00% | 60.25% |
 | Random Forest | **82.13%** | **74.25%** |
