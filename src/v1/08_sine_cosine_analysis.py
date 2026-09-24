@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 plt.rcParams["font.family"] = ["Microsoft JhengHei"]
 plt.rcParams["axes.unicode_minus"] = False
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset.csv')
+df = pd.read_csv('data/v1/function_dataset.csv')
 X = df.drop(columns=['sample_id', 'label', 'noise_sigma'])
 y = df['label']
 sample_id = df['sample_id']
@@ -15,7 +15,7 @@ sample_id = df['sample_id']
 X_train, X_test, y_train, y_test, id_train, id_test = train_test_split(
     X, y, sample_id, test_size=0.2, random_state=10, stratify=y)
 
-best_model = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
+best_model = load('models/v1/best_model.joblib')
 y_pred = best_model.predict(X_test)
 
 test_df = pd.DataFrame({'sample_id': id_test.values, 
@@ -25,7 +25,7 @@ test_df = test_df[test_df['label'].isin(['sine', 'cosine'])].copy()
 test_df['error'] = (test_df['label'] != test_df['predicted_label'])
 
 # 讀取metadata檔案
-metadata = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_metadata.csv')
+metadata = pd.read_csv('data/v1/function_metadata.csv')
 metadata = metadata[['sample_id', 'param_1', 'param_2', 'param_3', 'param_4', 'noise_sigma']]
 test_metadata = metadata.copy()
 
@@ -99,7 +99,7 @@ print("參數分析:")
 print(f"樣本數: {len(test_df)}")
 print(f"預測錯誤: {test_df['error'].sum()}")
 
-metadata = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_metadata.csv')
+metadata = pd.read_csv('data/v1/function_metadata.csv')
 metadata = metadata[['sample_id', 'param_1', 'param_2', 'param_3', 'param_4', 'noise_sigma']]
 test_df = test_df.merge(metadata, on='sample_id', how='left', validate='one_to_one')
 
@@ -139,7 +139,7 @@ for parameter in parameters:
     print("\n")
 
 # 儲存參數統計比較
-para_sum_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\sine_cosine_parameter_analysis.html')
+para_sum_df.to_html('data/v1/sine_cosine_parameter_analysis.html')
 
 # 繪製圖表(正確/錯誤樣本的參數平均值)
 plot_data = para_sum_df[['Parameter', 'Correct Mean', 'Error Mean']]
@@ -152,5 +152,5 @@ plt.xticks()
 plt.grid()
 plt.tight_layout()
 plt.legend()
-plt.savefig(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\sine_cosine_error_analysis.png')
+plt.savefig('data/v1/sine_cosine_error_analysis.png')
 plt.show()

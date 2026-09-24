@@ -4,7 +4,7 @@ from joblib import load
 from sklearn.model_selection import train_test_split
 
 # 讀取原始資料
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset.csv')
+df = pd.read_csv('data/v1/function_dataset.csv')
 
 # 定義模型特徵
 X = df.drop(columns=['sample_id', 'label', 'noise_sigma'])
@@ -16,7 +16,7 @@ X_train, X_test, y_train, y_test, id_train, id_test = train_test_split(
     X, y, sample_id, test_size=0.2, random_state=10, stratify=y)
 
 # 載入最佳模型
-best_model = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
+best_model = load('models/v1/best_model.joblib')
 
 # 開始預測
 y_pred = best_model.predict(X_test)
@@ -32,7 +32,7 @@ print(f"預測錯誤數量: {test_all_df['error'].sum()}")
 print(f"整體錯誤率: {test_all_df['error'].mean():.2%}\n")
 
 # 讀取metadata檔案
-metadata = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_metadata.csv')
+metadata = pd.read_csv('data/v1/function_metadata.csv')
 metadata = metadata[['sample_id', 'param_1', 'param_2', 'param_3', 'param_4', 'noise_sigma']]
 
 # 加入 metadata

@@ -1,7 +1,7 @@
 # 02_data_exploration.py
 import pandas as pd
 
-df_dataset = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset.csv')
+df_dataset = pd.read_csv('data/v1/function_dataset.csv')
 # 查看基本資料資訊
 print(f"數據外型: {df_dataset.shape}")
 print(f"前5筆資料:\n{df_dataset.head()}\n")
@@ -15,7 +15,7 @@ print(f"Noise 統計:\n{df_dataset['noise_sigma'].describe()}")           # 查�
 print('='*120)
 
 
-df_metadata = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_metadata.csv')
+df_metadata = pd.read_csv('data/v1/function_metadata.csv')
 # 查看基本資料資訊
 print(f"數據外型: {df_metadata.shape}")
 print(f"前5筆資料:\n{df_metadata.head()}\n")

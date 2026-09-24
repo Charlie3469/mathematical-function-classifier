@@ -8,7 +8,7 @@ from sklearn.linear_model import LinearRegression
 plt.rcParams["font.family"] = ["Microsoft JhengHei"]
 plt.rcParams["axes.unicode_minus"] = False
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_cleaned.csv')
+df = pd.read_csv('data/v1/function_dataset_cleaned.csv')
 X = df.drop(columns=['label'])
 y = df['label']
 
@@ -71,7 +71,7 @@ test_math_features = pd.DataFrame({'slope': test_slopes,
 X_test_math = pd.concat([X_test.reset_index(drop=True),
                          test_math_features.reset_index(drop=True)], axis=1)
 
-model_math = load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
+model_math = load('models/v1/best_model.joblib')
 model_math.fit(X_train_math, y_train.reset_index(drop=True))
 
 
@@ -86,7 +86,7 @@ importance_df = importance_df.sort_values(by='Importance', ascending=False).rese
 print("Feature Importance 前20名:")
 print(importance_df.head(20).to_string(index=False, formatters={'Importance': '{:.3f}'.format}))
 print('-'*100)
-importance_df.to_html(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\feature_importance.html')
+importance_df.to_html('data/v1/feature_importance.html')
 
 math_feature_names = ['slope', 'amplitude', 'first_diff_mean', 'first_diff_std', 
                       'second_diff_mean', 'second_diff_std']
@@ -117,5 +117,5 @@ plt.title("最佳模型的Feature Importance前20名")
 plt.grid(axis='x', alpha=0.3)
 plt.tight_layout()
 plt.legend()
-plt.savefig(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\feature_importance_top20.png')
+plt.savefig('data/v1/feature_importance_top20.png')
 plt.show()

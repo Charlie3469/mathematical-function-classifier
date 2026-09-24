@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import *
 
 # 讀取資料
-data = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_merged.csv')
+data = pd.read_csv('data/v1/function_dataset_merged.csv')
 X = data.drop(columns=['label'])
 y = data['label']
 
@@ -19,14 +19,14 @@ X_test = X.iloc[train_rows:].copy()
 y_train = y.iloc[:train_rows].copy()
 y_test = y.iloc[train_rows:].copy()
 
-baseline_model = joblib.load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model.joblib')
+baseline_model = joblib.load('models/v1/best_model.joblib')
 baseline_model.fit(X_train, y_train)
 baseline_train_pred = baseline_model.predict(X_train)
 baseline_test_pred = baseline_model.predict(X_test)
 baseline_train_acc = accuracy_score(y_train, baseline_train_pred)
 baseline_test_acc = accuracy_score(y_test, baseline_test_pred)
 
-tuned = joblib.load(r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\best_model_tuned.joblib')
+tuned = joblib.load('models/v1/best_model_tuned.joblib')
 tuned.fit(X_train, y_train)
 tuned_train_pred = tuned.predict(X_train)
 tuned_test_pred = tuned.predict(X_test)
@@ -69,5 +69,5 @@ print(f"準確度: {best_accuracy:.4f}\n")
 # 儲存最終模型
 model_package = {'model': final_model,
                  'feature_names': X_train.columns.tolist()}
-joblib.dump(model_package, r'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\final_model.joblib')
+joblib.dump(model_package, 'models/v1/final_model.joblib')
 print("已儲存最終模型!")

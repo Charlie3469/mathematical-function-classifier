@@ -11,7 +11,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
 
-df = pd.read_csv(r'D:\Python\我的AI作品集\專案1_數學函數辨識\data\v1\function_dataset_cleaned.csv')
+df = pd.read_csv('data/v1/function_dataset_cleaned.csv')
 
 # 定義特徵與目標變數
 X = df.drop(columns=['label'])
@@ -50,4 +50,4 @@ for name, model in models.items():
     print(f"{name} 模型訓練完成, 耗時: {elapsed_time:.3f}秒\n")
 
     # 儲存到joblib
-    joblib.dump(model, rf'D:\Python\我的AI作品集\專案1_數學函數辨識\models\v1\{name}_baseline.joblib')
+    joblib.dump(model, f'models/v1/{name}_baseline.joblib')
