@@ -1,4 +1,4 @@
-# 專案: 數學函數辨識（Mathematical Function Classifier）
+# 專案｜數學函數辨識（Mathematical Function Classifier）
 ---
 ## 專案簡介:
 這是一個結合**數學與資工方面**的知識與概念，並融合起來，建立出一個以機器學習分類為主的專案，目標是根據使用者輸入的一些取樣值，來判斷它屬於哪一種函數類型。專案目前包含 8 種函數：
