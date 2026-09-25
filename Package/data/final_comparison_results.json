@@ -7,7 +7,7 @@
         "train_accuracy": 0.9865625,
         "test_accuracy": 0.7125,
         "error_rate": 0.2875,
-        "training_time_seconds": 17.105643800008693,
+        "training_time_seconds": 14.409935100004077,
         "confusion_matrix": [
             [
                 59,
@@ -99,7 +99,7 @@
         "train_accuracy": 1.0,
         "test_accuracy": 0.7825,
         "error_rate": 0.2175,
-        "training_time_seconds": 0.8518986999988556,
+        "training_time_seconds": 0.780079600008321,
         "confusion_matrix": [
             [
                 84,
