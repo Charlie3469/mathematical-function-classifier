@@ -112,17 +112,16 @@
 
 | 模型 | V1 Accuracy | V2 Accuracy |
 |---|---:|---:|
-| Logistic Regression | 45.50% | 21.62% |
-| Decision Tree | 71.00% | 60.25% |
-| Random Forest | **82.13%** | **74.25%** |
-| KNN | 81.00% | 71.37% |
-| SVM | 76.00% | 59.00% |
+| Logistic Regression | 18.38% | 19.13% |
+| Decision Tree | 62.00% | 58.00% |
+| Random Forest | **69.63%** | **70.88%** |
+| KNN | 63.88% | 60.13% |
+| SVM | 35.88% | 47.00% |
 
 其中 Random Forest 的測試集準確率皆為最高，因此 **Random Forest** 是本專案的主要訓練模型。
 
 ### 錯誤分析
-在專案 V1 初期，**Sine 與 Cosine** 曾是較明顯的混淆來源，因此進一步分析函數生成參數與 phase 範圍(例如:
-從[-pi/2, pi/2]調整成[-pi/4, pi/4])，並調整資料生成條件。調整後，兩者之間的混淆狀況有明顯降低。
+在專案 V1 初期，**Sine 與 Cosine** 曾是較明顯的混淆來源，因此在 V2 版本有進一步分析函數生成參數與 phase 範圍(例如:從[-pi/2, pi/2]調整成[-pi/4, pi/4])，並調整資料生成條件。調整後，兩者之間的混淆狀況有明顯降低。
 但目前仍有其他部分類別容易混淆，顯示不同函數在特定參數與雜訊條件下，可能具有相似的局部形狀。
 
 ### 特徵工程
@@ -243,118 +242,114 @@ Stacking Ensemble
 ## 專案結構
 ```text
 專案1_數學函數辨識/
-│
-├─ data/
-│  ├─ v1/
-│  │  ├─ function_dataset.csv
-│  │  ├─ function_dataset_cleaned.csv
-│  │  ├─ function_dataset_merged.csv
-│  │  ├─ function_metadata.csv
-│  │  ├─ Model_Comparison.html
-│  │  ├─ parameter_analysis.html
-│  │  ├─ error_analysis.png
-│  │  ├─ sine_cosine_parameter_analysis.html
-│  │  ├─ sine_cosine_error_analysis.png
-│  │  ├─ feature_importance.html
-│  │  ├─ feature_importance_top20.png
-│  │  └─ final_confusion_matrix.png
+│  
+├─ Package/
+│  ├─ data/
+│  │  ├─ v1/
+│  │  │  ├─ function_dataset.csv
+│  │  │  ├─ function_dataset_cleaned.csv
+│  │  │  ├─ function_dataset_reset.csv
+│  │  │  ├─ function_metadata.csv
+│  │  │  ├─ model_results.html
+│  │  │  ├─ parameter_results.html
+│  │  │  ├─ advanced_parameter_results.html
+│  │  │  ├─ advanced_error_analysis.png
+│  │  │  ├─ feature_importance.html
+│  │  │  ├─ feature_importance_results.png
+│  │  │  └─ v1_results.png
+│  │  │
+│  │  ├─ v2/
+│  │  │  ├─ function_dataset_v2.csv
+│  │  │  ├─ function_dataset_cleaned_v2.csv
+│  │  │  ├─ function_dataset_reset_v2.csv
+│  │  │  ├─ function_metadata_v2.csv
+│  │  │  ├─ model_results_v2.html
+│  │  │  ├─ parameter_results_v2.html
+│  │  │  ├─ advanced_parameter_results_v2.html
+│  │  │  ├─ advanced_error_analysis_v2.png
+│  │  │  ├─ feature_importance_v2.html
+│  │  │  ├─ feature_importance_results_v2.png
+│  │  │  └─ v2_results.png
+│  │  │
+│  │  ├─ final_results.csv
+│  │  ├─ final_results.html
+│  │  └─ final_comparision_results.json
 │  │
-│  ├─ v2/
-│  │  ├─ function_dataset_v2.csv
-│  │  ├─ function_dataset_cleaned_v2.csv
-│  │  ├─ function_dataset_merged_v2.csv
-│  │  ├─ function_metadata_v2.csv
-│  │  ├─ Model_Comparison_v2.html
-│  │  ├─ parameter_analysis_v2.html
-│  │  ├─ error_analysis_v2.png
-│  │  ├─ sine_cosine_parameter_analysis_v2.html
-│  │  ├─ sine_cosine_error_analysis_v2.png
-│  │  ├─ feature_importance_v2.html
-│  │  ├─ feature_importance_top10_v2.png
-│  │  └─ final_confusion_matrix_v2.png
+│  ├─ models/
+│  │  ├─ v1/
+│  │  │  ├─ LogisticRegression_baseline.joblib
+│  │  │  ├─ DecisionTree_baseline.joblib
+│  │  │  ├─ RandomForest_baseline.joblib
+│  │  │  ├─ KNN_baseline.joblib
+│  │  │  ├─ SVM_baseline.joblib
+│  │  │  ├─ best_model_tuned.joblib
+│  │  │  ├─ best_model.joblib
+│  │  │  └─ final_model.joblib
+│  │  │
+│  │  └─ v2/
+│  │     ├─ LogisticRegression_baseline_v2.joblib
+│  │     ├─ DecisionTree_baseline_v2.joblib
+│  │     ├─ RandomForest_baseline_v2.joblib
+│  │     ├─ KNN_baseline_v2.joblib
+│  │     ├─ SVM_baseline_v2.joblib
+│  │     ├─ best_model_tuned_v2.joblib
+│  │     ├─ best_model_v2.joblib
+│  │     └─ final_model_v2.joblib
 │  │
-│  └─ comparison_results/
-│     ├─ v1_v2_final_comparision.csv
-│     ├─ v1_v2_final_comparision.html
-│     └─ v1_v2_final_comparision.json
-│
-├─ models/
-│  ├─ v1/
-│  │  ├─ LogisticRegression_baseline.joblib
-│  │  ├─ DecisionTree_baseline.joblib
-│  │  ├─ RandomForest_baseline.joblib
-│  │  ├─ KNN_baseline.joblib
-│  │  ├─ SVM_baseline.joblib
-│  │  ├─ best_model_tuned.joblib
-│  │  ├─ best_model.joblib
-│  │  └─ final_model.joblib
+│  ├─ py/
+│  │  ├─ v1/
+│  │  │  ├─ 01_function_generator.py
+│  │  │  ├─ 02_data_exploration.py
+│  │  │  ├─ 03_data_preparation.py
+│  │  │  ├─ 04_model_training.py
+│  │  │  ├─ 05_model_prediction.py
+│  │  │  ├─ 06_error_analysis.py
+│  │  │  ├─ 07_parameter_analysis.py
+│  │  │  ├─ 08_advanced_analysis.py
+│  │  │  ├─ 09_feature_engineering.py
+│  │  │  ├─ 10_feature_experiment.py
+│  │  │  ├─ 11_feature_importance.py
+│  │  │  ├─ 12_model_tuning.py
+│  │  │  ├─ 13_ensemble.py
+│  │  │  └─ 14_final_model.py
+│  │  │
+│  │  ├─ v2/
+│  │  │  ├─ 15_function_generator_v2.py
+│  │  │  ├─ 16_data_exploration_v2.py
+│  │  │  ├─ 17_data_preparation_v2.py
+│  │  │  ├─ 18_model_training_v2.py
+│  │  │  ├─ 19_model_prediction_v2.py
+│  │  │  ├─ 20_error_analysis_v2.py
+│  │  │  ├─ 21_parameter_analysis_v2.py
+│  │  │  ├─ 22_advanced_analysis_v2.py
+│  │  │  ├─ 23_feature_engineering_v2.py
+│  │  │  ├─ 24_feature_experiment_v2.py
+│  │  │  ├─ 25_feature_importance_v2.py
+│  │  │  ├─ 26_model_tuning_v2.py
+│  │  │  ├─ 27_ensemble_v2.py
+│  │  │  └─ 28_final_model_v2.py
+│  │  │
+│  │  └─ 29_final_comparison.py
 │  │
-│  └─ v2/
-│     ├─ LogisticRegression_baseline_v2.joblib
-│     ├─ DecisionTree_baseline_v2.joblib
-│     ├─ RandomForest_baseline_v2.joblib
-│     ├─ KNN_baseline_v2.joblib
-│     ├─ SVM_baseline_v2.joblib
-│     ├─ best_model_tuned_v2.joblib
-│     ├─ best_model_v2.joblib
-│     └─ final_model_v2.joblib
-│
-├─ notebooks/
-│  ├── 01_function_generator.ipynb
-│  ├── 02_eda.ipynb
-│  ├── 03_models.ipynb
-│  ├── 04_error_analysis.ipynb
+│  ├── .gitignore
+│  ├── 01_eda.ipynb
+│  ├── 02_models.ipynb
+│  ├── 03_error_analysis.ipynb
+│  ├── 04_advanced_analysis.ipynb
 │  ├── 05_features.ipynb
-│  ├── 06_ensembling.ipynb
-│  ├── 07_final.ipynb
-│  ├── 08_function_generator_v2.ipynb
-│  ├── 09_eda_v2.ipynb
-│  ├── 10_models_v2.ipynb
-│  ├── 11_error_analysis_v2.ipynb
-│  ├── 12_features_v2.ipynb
-│  ├── 13_ensembling_v2.ipynb
-│  ├── 14_final_v2.ipynb
-│  └── 15_final_comparison.ipynb
-│
-├─ src/
-│  ├─ v1/
-│  │  ├─ 01_function_generator.py
-│  │  ├─ 02_data_exploration.py
-│  │  ├─ 03_data_preparation.py
-│  │  ├─ 04_model_training.py
-│  │  ├─ 05_model_prediction.py
-│  │  ├─ 06_error_analysis.py
-│  │  ├─ 07_parameter_analysis.py
-│  │  ├─ 08_sine_cosine_analysis.py
-│  │  ├─ 09_feature_engineering.py
-│  │  ├─ 10_feature_experiment.py
-│  │  ├─ 11_feature_importance.py
-│  │  ├─ 12_model_tuning.py
-│  │  ├─ 13_ensemble.py
-│  │  └─ 14_final_model.py
-│  │
-│  ├─ v2/
-│  │  ├─ 15_function_generator_v2.py
-│  │  ├─ 16_data_exploration_v2.py
-│  │  ├─ 17_data_preparation_v2.py
-│  │  ├─ 18_model_training_v2.py
-│  │  ├─ 19_model_prediction_v2.py
-│  │  ├─ 20_error_analysis_v2.py
-│  │  ├─ 21_parameter_analysis_v2.py
-│  │  ├─ 22_sine_cosine_analysis_v2.py
-│  │  ├─ 23_feature_engineering_v2.py
-│  │  ├─ 24_feature_experiment_v2.py
-│  │  ├─ 25_feature_importance_v2.py
-│  │  ├─ 26_model_tuning_v2.py
-│  │  ├─ 27_ensemble_v2.py
-│  │  └─ 28_final_model_v2.py
-│  │
-│  └─ 29_final_comparison.py
+│  ├── 06_final.ipynb
+│  ├── 07_eda_v2.ipynb
+│  ├── 08_models_v2.ipynb
+│  ├── 09_error_analysis_v2.ipynb
+│  ├── 10_advanced_analysis_v2.ipynb
+│  ├── 11_features_v2.ipynb
+│  ├── 12_final_v2.ipynb
+│  └── 13_final_comparison.ipynb
 │
 ├─ app.py
 ├─ app_v2.py
-├─ requirements.txt
-└─ README.md
+├─ README.md
+└─ requirements.txt
 ```
 
 ---
