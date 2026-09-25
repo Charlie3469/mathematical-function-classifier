@@ -30,9 +30,6 @@ def load_model():
         raise FileNotFoundError(f"找不到模型檔案:\n{MODEL_PATH}\n\n請確認 final_model.joblib 是否存在。")
     package = joblib.load(MODEL_PATH)
 
-    # 目前 V1 儲存格式：
-    # {'model': model, 
-    #  'feature_names': [...]}
     if isinstance(package, dict) and "model" in package:
         model = package["model"]
         feature_names = package.get("feature_names")
@@ -53,7 +50,7 @@ def make_features(y_values, feature_names):
         scale = 1.0
     y = (y-np.mean(y)) / scale
 
-    raw_features = {f"y_{i:03d}": y[i] for i in range(N_POINTS)}
+    raw_features = {f"y_{i:02d}": y[i] for i in range(N_POINTS)}
 
     # 數學特徵
     x_index = np.arange(N_POINTS, dtype=float)
@@ -80,19 +77,19 @@ def make_features(y_values, feature_names):
 # ----推估函數參數----
 def estimate_parameters(prediction, y_values):
     y = np.asarray(y_values, dtype=float)
-    x = np.linspace(-2, 2, len(y))
+    x = np.linspace(-5, 5, len(y))
     prediction = str(prediction).lower()
     if prediction == "linear":                  # Linear: y = ax + b
         a, b = np.polyfit(x, y, 1)
-        return {"formula": f"y = {a:.4f}x + {b:.4f}",
+        return {"formula": f"y = {a:.2f}x + {b:.2f}",
                 "parameters": {"a": a, "b": b}}
     elif prediction == "quadratic":             # Quadratic: y = ax² + bx + c
         a, b, c = np.polyfit(x, y, 2)
-        return {"formula": (f"y = {a:.4f}x² {b:+.4f}x {c:+.4f}"),
+        return {"formula": (f"y = {a:.2f}x² {b:+.2f}x {c:+.2f}"),
                 "parameters": {"a": a, "b": b, "c": c}}
     elif prediction == "cubic":                 # Cubic: y = ax³ + bx² + cx + d
         a, b, c, d = np.polyfit(x, y, 3)
-        return {"formula": (f"y = {a:.4f}x³ {b:+.4f}x² {c:+.4f}x {d:+.4f}"),
+        return {"formula": (f"y = {a:.2f}x³ {b:+.2f}x² {c:+.2f}x {d:+.2f}"),
                 "parameters": {"a": a, "b": b, "c": c, "d": d}}
     else:
         return None
@@ -112,7 +109,7 @@ def parse_input(text):
 # ----UI介面----
 st.title("📈數學函數辨識系統")      # 標題
 st.write("V1 模型需要 100 個取樣值。輸入一組函數取樣值，讓 AI 判斷它最可能屬於哪一種數學函數")  # 背景與說明
-st.info("請輸入至少 100 個樣本點。")        # 對於使用者的指令
+st.info("請輸入 100 個樣本點。")        # 對於使用者的指令
 
 # 所有函數類型清單
 with st.expander("可辨識的 8 種函數類型"):
@@ -159,7 +156,7 @@ if predict_button:
             st.code(parameter_result["formula"], language="text")
             st.subheader("- 參數:")
             for name, value in parameter_result["parameters"].items():
-                st.write(f"**{name} = {value:.4f}**")
+                st.write(f"**{name} = {value:.2f}**")
 
     except FileNotFoundError as exc:
         st.error(str(exc))
