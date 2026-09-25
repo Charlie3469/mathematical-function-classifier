@@ -1,0 +1,3 @@
+version,model,sample_points,raw_features,feature_count,train_accuracy,test_accuracy,error_count,training_time_seconds
+V1,StackingClassifier,100,100,106,0.9865625,0.7125,230,13.044884500006447
+V2,RandomForestClassifier,10,10,16,0.99375,0.7875,170,0.6781734999967739
